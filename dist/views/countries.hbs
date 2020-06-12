@@ -1,0 +1,50 @@
+<main class="countries-wrapper">
+    <div class="container">
+    <div class="w-100 busqueda-covid-app mt-3 mb-2">
+        <div class="container-busqueda">
+            <form class="mb-lg-4 ">
+                <input autofocus="true" id="searched" type="text" placeholder="Search...">
+                <button id="btn-send" type="button"><i class="fa fa-search mr-4"></i>
+            </form>
+        </div>
+    </div>
+    <div class="w-100 text-center mb-3 text-white">
+        <p><small>{{fecha}} - <strong id="cantidad-countries">{{cantidad}} countries affected</strong></small> </p>
+    </div>
+    <div id="row-paises" class="row mt-4 mb-4">
+        {{#each all}}
+        <div class="col-lg-4 col-md-4 col-sm-6 mb-3 mt-3 card-col-paises">
+                <div class="card-main-container">
+                    <div class="card-main">
+                        <div class="description">
+                        <h5>{{datosPais.nombre}}</h5>
+                        <div class="sub-content">
+                            <li>Casos confirmados: {{confirmados}}</li>
+                            <li>Fallecidos: {{fallecidos}}</li>
+                            <li>Recuperados: {{recuperados}}</li>
+                            <li>% Recuperación: {{pRecuperacion}}%</li>
+                            <li>% Letalidad: {{pletalidad}}%</li>
+
+
+                        </div>
+
+
+                        <a class="btn-country" href="/countries/{{datosPais.codigo}}">
+                            <strong>
+                                Ver más
+                                <i class="fas fa-angle-right"></i>
+                            </strong>
+                        </a>
+                        </div>
+                        {{!-- <div class="img-desc"> --}}
+                            <img loading="lazy" draggable="false" class="img-fluid" src="{{datosPais.bandera}}" alt />
+                        {{!-- </div> --}}
+                    </div>
+                </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+</div>
+</main>

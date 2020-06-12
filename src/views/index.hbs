@@ -1,0 +1,63 @@
+<main class="index-body">
+    <div class="estrella primera "></div>
+    <div class="estrella segunda "></div>
+    <div class="estrella tercera "></div>
+    <div class="estrella cuarta "></div>
+    <div class="estrella quinta "></div>
+    <div class="estrella sexta "></div>
+    <div class="estrella septima "></div>
+    <div class="estrella octava "></div>
+    <div class="estrella novena "></div>
+    <div class="estrella decima "></div>
+
+    <div class="contenido absolute-center zoomAnimation">
+        <div class="mapa absolute-center"></div>
+    </div>
+
+    <div class="container-fluid container-cards-index">
+        <div class="row row-cards">
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2 mb-4 col-card-index1">
+                <div class="card-main card-main2 fadeIn card-1">
+                    <div class="content">
+                        <h5 class="title">Detected cases <i class="fas fa-user-friends"></i></h5>
+                        <h2 class="title">{{cantConfirmados}}</h2>
+                        <p class="p-0 m-0"><small><strong>+{{nuevosCasos}} last 24h</strong></small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>{{!-- Separator --}}
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2 mb-4 col-card-index2">
+                <div class="card-main card-main2 fadeIn card-2">
+                    <div class="content">
+                        <h5 class="title">Deaths <i class="fas fa-skull-crossbones"></i></h5>
+                        <h2 class="title">{{cantFallecidos}}</h2>
+                        <p class="p-0 m-0"><small><strong>+{{nuevasMuertes}} last 24h - {{pLetalidad}}% lethality</strong></small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2 mb-4 col-card-index3">
+                <div class="card-main card-main2 fadeIn card-3">
+                    <div class="content">
+                        <h5 class="title">Recoveries <i class="fas fa-user-shield"></i></h5>
+                        <h2 class="title">{{cantRecuperados}}</h2>
+                        <p class="p-0 m-0"><small><strong>{{pRecuperacion}} % healing</strong></small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>{{!-- Separator --}}
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2 mb-4 col-card-index4">
+                <div class="card-main card-main2 fadeIn card-4">
+                    <div class="content">
+                        <h5 class="title">Actives <i class="fas fa-diagnoses"></i></h5>
+                        <h2 class="title">{{activos}}</h2>
+                        {{!-- 
+                        <p class="p-0 m-0"><small><strong>{{paisesAfectados}} countries affected</strong></small></p> 
+                         --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h6 class="title-pais title-fecha"><small><strong>{{fecha}} - Luis Melgarejo. All rights reserved </strong></small></h6>
+</main>

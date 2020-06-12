@@ -1,0 +1,35 @@
+<main class="countries-wrapper">
+    <div class="container">
+    <div class="w-100 text-center mb-3 text-white">
+        <p><small>{{fecha}} - <strong>{{continents.cantidad}} continents</strong></small> </p>
+    </div>
+
+    <div class="row mt-4 mb-4">
+        {{#each continents.dataPaises}}
+        <div class="col-lg-4 col-md-4 col-sm-6 mb-3 mt-3">
+                <div class="card-main-container">
+                    <div class="card-main card-main-continent">
+                        <div class="description">
+                            <h5>{{nombre}}</h5>
+                            <div class="sub-content">
+                                <h4 class="title-sombra">{{cantPaises}} countries</h4>
+                            </div>
+
+
+                            <a class="btn-country" href="/continents/{{nombre}}">
+                                <strong>
+                                    Ver más
+                                    <i class="fas fa-angle-right"></i>
+                                </strong>
+                            </a>
+                        </div>
+                        <img loading="lazy" draggable="false" class="img-fluid bg-img-world" src="/img/map.png" alt="world">
+                    </div>
+                </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+</div>
+</main>

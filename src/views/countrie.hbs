@@ -1,0 +1,62 @@
+<main>
+    <div class="container">
+        <h3 class="title-pais text-center"><strong id="title-pais-details"></strong> (<small>{{codPais}}</small>)- {{year}}</h3>
+            <div class="select-wrapper mb-2 mt-4">
+                <select id="select-month" class="select">
+                    <option value="all">All months</option>
+                </select>
+            </div>
+        <div class="row row-cards">
+            <div class="col-lg-8 col-md-12 col-sm-12 h-100">
+                <div id="chart-countrie">
+
+                </div>
+                <div class="title-pais" id="message-error"></div>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 h-100">
+                <div class="container-chart mt-3">
+                    <div id="chart-countrie2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cards row-country-selected">
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-2 mb-4 col-card-index1">
+                <div class="card-main card-main2 fadeIn card-1">
+                    <div class="content">
+                        <h5 class="title">Detected cases <i class="fas fa-user-friends"></i></h5>
+                        <h2 class="title" id="cant-confirmados"></h2>
+                        <p class="p-0 m-0" id="aumento-casos"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-2 mb-4 col-card-index2">
+                <div class="card-main card-main2 fadeIn card-2">
+                    <div class="content">
+                        <h5 class="title">Deaths <i class="fas fa-skull-crossbones"></i></h5>
+                        <h2 class="title" id="cant-fallecidos"></h2>
+                        <p class="p-0 m-0" id="aumento-fallecidos"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-2 mb-4 col-card-index3">
+                <div class="card-main card-main2 fadeIn card-3">
+                    <div class="content">
+                        <h5 class="title">Recoveries <i class="fas fa-user-shield"></i></h5>
+                        <h2 class="title" id="cant-recuperados"></h2>
+                        <p class="p-0 m-0" id="aumento-recuperados"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-2 mb-4 col-card-index4">
+                <div class="card-main card-main2 fadeIn card-4">
+                    <div class="content">
+                        <h5 class="title">Actives <i class="fas fa-diagnoses"></i></h5>
+                        <h2 class="title" id="cant-activos"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h6 class="title-pais text-center mb-3"><small><strong>{{year}} - Luis Melgarejo. All rights reserved </strong></small></h6>
+    </div>
+</main>

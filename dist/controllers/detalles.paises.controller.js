@@ -27,6 +27,7 @@ class daoDetallesPais {
                     all: casosPais,
                     cantidad: casosPais.length,
                     fecha: new Date().toDateString(),
+                    year: new Date().getFullYear(),
                     continents: continente_controller_1.default.getDaoContinente().getMoreInfoContinent()
                 });
             });
@@ -48,7 +49,7 @@ class daoDetallesPais {
                     return res.render('error');
                 const respuestaAPI = JSON.parse(body).Countries;
                 const casosPais = respuestaAPI.map((caso) => {
-                    const casoPais = new DetallesPais_1.default(caso.TotalConfirmed, caso.TotalDeaths, caso.TotalRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
+                    const casoPais = new DetallesPais_1.default(caso.TotalConfirmed + caso.NewConfirmed, caso.TotalDeaths + caso.NewDeaths, caso.TotalRecovered + caso.NewRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
                     const pLetalidad = casoPais.getPorcentajeLetalidad();
                     const pRecuperacion = casoPais.getPorcentajeRecuperados();
                     const datosPais = paises_controller_1.default.getDaoPais().searchCountry(casoPais.getCodPais());
@@ -64,11 +65,21 @@ class daoDetallesPais {
                     cantidad: respuesta.length,
                     region,
                     fecha: new Date().toDateString(),
+                    year: new Date().getFullYear(),
                     continents: continente_controller_1.default.getDaoContinente().getMoreInfoContinent()
                 });
             });
         }
         catch (error) { }
+    }
+    renderCountrieByCod(req, res) {
+        const codPais = req.params.cod_pais;
+        res.render('countrie', {
+            codPais,
+            year: new Date().getFullYear(),
+            fecha: new Date().toDateString(),
+            continents: continente_controller_1.default.getDaoContinente().getMoreInfoContinent()
+        });
     }
     searchBusqueda(req, res) {
         request_1.default('https://api.covid19api.com/summary', (error, response, body) => {
@@ -76,7 +87,7 @@ class daoDetallesPais {
                 return res.status(404).json({ msg: 'error' });
             const respuestaAPI = JSON.parse(body).Countries;
             const casosPais = respuestaAPI.map((caso) => {
-                const casoPais = new DetallesPais_1.default(caso.TotalConfirmed, caso.TotalDeaths, caso.TotalRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
+                const casoPais = new DetallesPais_1.default(caso.TotalConfirmed + caso.NewConfirmed, caso.TotalDeaths + caso.NewDeaths, caso.TotalRecovered + caso.NewRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
                 const datosPais = paises_controller_1.default.getDaoPais().searchCountry(casoPais.getCodPais());

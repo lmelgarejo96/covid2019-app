@@ -15,6 +15,7 @@ class CountriesRoutes {
     }
     routes() {
         this.router.get('/', detalles_paises_controller_1.default.getListadoPaises);
+        this.router.get('/:cod_pais', detalles_paises_controller_1.default.renderCountrieByCod);
     }
 }
 const countriesRoutes = new CountriesRoutes();

@@ -631,3 +631,99 @@ main {
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
 }
+
+
+/* select month */
+
+.select-wrapper {
+    position: relative;
+    max-width: 300px;
+}
+
+@media screen and (max-width: 600px) {
+    .select-wrapper {
+        margin: 0 auto;
+    }
+}
+
+.select-wrapper::after {
+    color: rgba(255, 255, 255, .8);
+    content: '▾';
+    margin-right: 10px;
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 20px;
+}
+
+.select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: #2f354e;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    padding: 12px;
+    width: 100%;
+    font-size: 18px;
+    outline: none;
+    color: rgba(255, 255, 255, .8);
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid #2f354e;
+    transition: all ease-in-out .3s;
+}
+
+.select option {
+    padding: 5px 0;
+}
+
+.select:focus,
+select:hover {
+    color: rgba(255, 255, 255, .7);
+    border: 1px solid rgba(255, 255, 255, .2);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+
+/* select.select option:hover {
+    box-shadow: 0 0 10px 100px #fff inset;
+    background: #fff !important;
+} */
+
+.select::-ms-expand {
+    display: none;
+}
+
+.container-chart {
+    padding: 1em 0;
+}
+
+@media screen and ( max-width: 500px) {
+    #apexchartsu19xigxs {
+        width: 300px;
+    }
+}
+
+.row-country-selected .card-main {
+    min-height: 140px !important;
+    text-align: center;
+}
+
+.row-country-selected .card-main h2,
+.row-country-selected .card-main p {
+    letter-spacing: 1px;
+}
+
+.dropdown-menu {
+    background: #24293d;
+}
+
+.dropdown-menu a {
+    color: rgba(255, 255, 255, .6);
+}
+
+.dropdown-menu a:hover {
+    background: #2f354e;
+    color: rgba(255, 255, 255, .8);
+}

@@ -17,7 +17,7 @@ class daoMundialController {
                 const casoPais = new DetallesMundial_1.default(respuestaAPI.total_cases, respuestaAPI.total_deaths, respuestaAPI.total_recovered, new Date(), respuestaAPI.total_new_cases_today, respuestaAPI.total_new_deaths_today, respuestaAPI.total_affected_countries);
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
-                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, fecha: new Date().toDateString(), activos: (casoPais.getCantConfirmados() - (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) });
+                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, year: new Date().getFullYear(), activos: (casoPais.getCantConfirmados() - (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) });
                 return res.render('index', obj);
             });
         }

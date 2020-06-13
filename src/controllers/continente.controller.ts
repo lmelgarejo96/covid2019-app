@@ -44,8 +44,8 @@ export default class ContinenteController {
 
     public setContinentPage(req: Request, res: Response){
         res.render('continents', {
+            year: new Date().getFullYear(),
             continents: ContinenteController.getDaoContinente().getMoreInfoContinent(),
-            fecha: new Date().toDateString(),
         });
     }
 }

@@ -35,6 +35,7 @@ class daoDetallesPais {
                     all: casosPais,
                     cantidad: casosPais.length,
                     fecha: new Date().toDateString(),
+                    year: new Date().getFullYear(),
                     continents: daoContinente.getDaoContinente().getMoreInfoContinent()
                 });
             });
@@ -56,9 +57,9 @@ class daoDetallesPais {
                 const respuestaAPI = JSON.parse(body).Countries;
                 const casosPais = respuestaAPI.map((caso: any)=>{
                     const casoPais = new DetallesPais(
-                        caso.TotalConfirmed,
-                        caso.TotalDeaths,
-                        caso.TotalRecovered,
+                        caso.TotalConfirmed+caso.NewConfirmed,
+                        caso.TotalDeaths+caso.NewDeaths,
+                        caso.TotalRecovered+caso.NewRecovered,
                         caso.Date,
                         caso.NewConfirmed,
                         caso.NewDeaths,
@@ -80,11 +81,21 @@ class daoDetallesPais {
                     cantidad: respuesta.length,
                     region,
                     fecha: new Date().toDateString(),
+                    year: new Date().getFullYear(),
                     continents: daoContinente.getDaoContinente().getMoreInfoContinent()
                 });
             });
 
         } catch (error) { }
+    }
+    renderCountrieByCod(req: Request, res: Response){
+        const codPais = req.params.cod_pais;
+        res.render('countrie', {
+            codPais,
+            year: new Date().getFullYear(),
+            fecha: new Date().toDateString(),
+            continents: daoContinente.getDaoContinente().getMoreInfoContinent()
+        });
     }
     searchBusqueda(req: Request, res: Response){
             requestAPI('https://api.covid19api.com/summary', (error, response, body: any) => {
@@ -92,9 +103,9 @@ class daoDetallesPais {
                 const respuestaAPI = JSON.parse(body).Countries;
                 const casosPais = respuestaAPI.map((caso: any)=>{
                     const casoPais = new DetallesPais(
-                        caso.TotalConfirmed,
-                        caso.TotalDeaths,
-                        caso.TotalRecovered,
+                        caso.TotalConfirmed+caso.NewConfirmed,
+                        caso.TotalDeaths+caso.NewDeaths,
+                        caso.TotalRecovered+caso.NewRecovered,
                         caso.Date,
                         caso.NewConfirmed,
                         caso.NewDeaths,

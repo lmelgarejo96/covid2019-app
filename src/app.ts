@@ -20,7 +20,7 @@ class App {
 
     setConfig(){
         this.app.set('port', process.env.PORT || 3200);
-        this.app.set('views', path.join(__dirname, 'views'));
+        this.app.set('views', path.join(__dirname, '../src/views'));
         this.app.engine('.hbs', exphbs({
             defaultLayout: 'main',
             layoutsDir: path.join(this.app.get('views'), 'layouts'),

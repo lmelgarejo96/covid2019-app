@@ -3,7 +3,7 @@
     <div class="w-100 busqueda-covid-app mt-3 mb-2">
         <div class="container-busqueda">
             <form class="mb-lg-4 ">
-                <input autofocus="true" id="searched" type="text" placeholder="Search...">
+                <input autofocus="false" id="searched" type="text" placeholder="Search...">
                 <button id="btn-send" type="button"><i class="fa fa-search mr-4"></i>
             </form>
         </div>
@@ -19,15 +19,12 @@
                         <div class="description">
                         <h5>{{datosPais.nombre}}</h5>
                         <div class="sub-content">
-                            <li>Casos confirmados: {{confirmados}}</li>
-                            <li>Fallecidos: {{fallecidos}}</li>
-                            <li>Recuperados: {{recuperados}}</li>
-                            <li>% Recuperación: {{pRecuperacion}}%</li>
-                            <li>% Letalidad: {{pletalidad}}%</li>
-
-
+                            <li>Total Confirmados: <span>{{cantConfirmados}}</span></li>
+                            <li>Total Fallecidos: <span>{{cantFallecidos}}</span></li>
+                            <li>Total Recuperados: <span>{{cantRecuperados}}</span></li>
+                            <li>% Recuperación: <span class="percent-green">{{pRecuperacion}}%</span></li>
+                            <li>% Letalidad: <span class="percent-red">{{pLetalidad}}%</span></li>
                         </div>
-
 
                         <a class="btn-country" href="/countries/{{datosPais.codigo}}">
                             <strong>
@@ -45,6 +42,6 @@
         {{/each}}
     </div>
 
-
+    <h6 class="title-pais text-center mb-3"><small><strong>{{year}} - Luis Melgarejo. All rights reserved </strong></small></h6>
 </div>
 </main>

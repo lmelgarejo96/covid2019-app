@@ -21,7 +21,7 @@ class App {
     }
     setConfig() {
         this.app.set('port', process.env.PORT || 3200);
-        this.app.set('views', path_1.default.join(__dirname, 'views'));
+        this.app.set('views', path_1.default.join(__dirname, '../src/views'));
         this.app.engine('.hbs', express_handlebars_1.default({
             defaultLayout: 'main',
             layoutsDir: path_1.default.join(this.app.get('views'), 'layouts'),

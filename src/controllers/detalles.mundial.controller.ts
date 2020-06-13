@@ -22,7 +22,7 @@ class daoMundialController {
                 )
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
-                const obj = { ...casoPais, pLetalidad, pRecuperacion, fecha: new Date().toDateString(), activos: (casoPais.getCantConfirmados()- (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) };
+                const obj = { ...casoPais, pLetalidad, pRecuperacion, year: new Date().getFullYear(), activos: (casoPais.getCantConfirmados()- (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) };
 
                 return res.render('index', obj);
             });

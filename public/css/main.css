@@ -36,6 +36,24 @@ nav {
     background: #24293d;
 }
 
+nav *,
+.navbar-collapse,
+.dropdown,
+.nav-item .dropdown .show,
+.nav-item .dropdown,
+.dropdown-toggle,
+.dropdown-menu {
+    transition: all ease-in-out .3s;
+}
+
+.nav-item {
+    padding: 0 18px;
+}
+
+.dropdown-menu {
+    border: none;
+}
+
 .navbar-brand img {
     max-height: 50px;
 }
@@ -58,9 +76,7 @@ main {
     width: 440px;
     background: #2f354e;
     color: #ccc;
-    border-top: 1px solid #2f354e;
-    border-left: 1px solid #2f354e;
-    border-bottom: 1px solid #232942;
+    border: 1px solid #83858b;
     transition: all ease-in-out .5s;
 }
 
@@ -96,7 +112,7 @@ main {
 
 .container-busqueda input {
     border-radius: 25px 0 0 25px;
-    width: 60vw;
+    /* width: 60vw; */
     max-width: 600px;
 }
 
@@ -146,7 +162,8 @@ main {
 
 .card-main:hover {
     box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
-    transform: scale(1.015);
+    transform: scale(1.01);
+    margin-top: -2px;
 }
 
 .card-main .description {
@@ -234,6 +251,10 @@ main {
     max-width: 80px;
 }
 
+.img-flag {
+    max-height: 35px;
+}
+
 .card-main img.bg-img-world {
     max-width: 100%;
     top: 50%;
@@ -246,6 +267,10 @@ main {
 .title-pais,
 .letters {
     color: rgba(255, 255, 255, .7);
+}
+
+.letters.small-letters {
+    font-size: 14px;
 }
 
 .percent-red {
@@ -401,9 +426,19 @@ main {
     z-index: 50;
 }
 
-.row-cards {
-    padding-top: 40px;
-    padding-bottom: 40px;
+.row-cards,
+.row-country-selected {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.container-card-chart {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .container-cards-index .card-index1 .card-main2 {
@@ -413,7 +448,7 @@ main {
 @media screen and (min-width: 609px) {
     .container-cards-index {
         margin-top: 80px;
-        height: calc(100vh - 80px);
+        min-height: calc(100vh - 80px);
         margin-left: 3em;
         margin-right: 3em;
     }
@@ -440,7 +475,6 @@ main {
 .contenido {
     width: 450px;
     height: 400px;
-    /* outline: 1px solid #ccc; */
 }
 
 .contenido img {
@@ -454,7 +488,6 @@ main {
 .mapa {
     width: 98%;
     height: 98%;
-    /* background: lightblue; */
     border-radius: 50%;
     box-shadow: -30px -20px 0 0 rgba(0, 0, 0, .15) inset, -70px -30px 0 0 rgba(0, 0, 0, .1) inset, 5px 5px 0 0 rgba(255, 255, 255, .2) inset;
     background: url('../img/mapa-mundo.png');
@@ -481,24 +514,6 @@ main {
 .fadeIn {
     animation: fadeIn ease-in-out 2s;
 }
-
-
-/* .container-cards-index .card-1 {
-    background: rgba(0, 0, 0, 0.6) !important;
-}
-
-.container-cards-index .card-2 {
-    background: rgba(170, 0, 0, .6) !important;
-}
-
-.container-cards-index .card-3 {
-    background: rgba(18, 131, 78, 0.6) !important;
-}
-
-.container-cards-index .card-4 {
-    background: rgba(0, 0, 0, 0.6) !important;
-}
- */
 
 @media screen and (max-width: 600px) {
     .contenido {
@@ -637,14 +652,15 @@ main {
 
 .select-wrapper {
     position: relative;
-    max-width: 300px;
+    max-width: 100%;
 }
 
-@media screen and (max-width: 600px) {
+
+/* @media screen and (max-width: 600px) {
     .select-wrapper {
         margin: 0 auto;
     }
-}
+} */
 
 .select-wrapper::after {
     color: rgba(255, 255, 255, .8);
@@ -700,8 +716,8 @@ select:hover {
 }
 
 @media screen and ( max-width: 500px) {
-    #apexchartsu19xigxs {
-        width: 300px;
+    .select {
+        border: 1px solid rgba(255, 255, 255, .2);
     }
 }
 
@@ -726,4 +742,31 @@ select:hover {
 .dropdown-menu a:hover {
     background: #2f354e;
     color: rgba(255, 255, 255, .8);
+}
+
+.pagination {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+}
+
+.pagination .btn-pagination {
+    background: none;
+    width: 30px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, .68);
+    text-align: center;
+    margin: 0 1px;
+    color: rgba(255, 255, 255, .8)
+}
+
+.pagination .btn-pagination.active-pagination {
+    background: rgba(0, 0, 0, .45);
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .pagination {
+        justify-content: center;
+    }
 }

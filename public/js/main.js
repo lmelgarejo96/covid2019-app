@@ -2,6 +2,7 @@ let allPaises = [];
 let allDatacountries = [];
 let actualCountryCode = ''
 let actualCountry = {}
+let actualPage = 1;
 const actualLocation = window.location.pathname.split('/');
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 const mesesIngles = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -12,7 +13,7 @@ function updateLinkActive() {
     const links = document.querySelectorAll('.nav-link');
     links.forEach((link) => {
         link.parentNode.classList.remove('active')
-        if (link.pathname === urlActual) {
+        if (link.pathname.split('/')[1] === actualLocation[1]) {
             link.parentNode.classList.add('active');
         }
     })
@@ -25,21 +26,83 @@ function search() {
         const input = document.getElementById('searched');
         input.addEventListener('keyup', () => {
             removeElements();
-            if (input.value.length === 0) {
-                returnPaisesDesdeContienentes('');
-            } else if (input.value.length >= 3) {
+            if (input.value.length > 2) {
                 returnPaisesDesdeContienentes(input.value);
+            } else {
+                initPagination(actualPage);
             }
         })
         btn.addEventListener('click', () => {
             removeElements();
-            if (input.value.length === 0) {
-                returnPaisesDesdeContienentes('');
-            } else if (input.value.length >= 3) {
+            if (input.value.length > 2) {
                 returnPaisesDesdeContienentes(input.value);
+            } else {
+                initPagination(actualPage);
             }
         })
     }
+}
+
+function buildDataList() {
+    const datalist = document.createElement('datalist');
+    datalist.id = 'datalist-autocomplete';
+    document.querySelector('#form-stats').appendChild(datalist);
+}
+
+function setItemsOnDataList(paises) {
+    const datalist = document.querySelector('#datalist-autocomplete');
+    datalist.innerHTML = '';
+    paises.forEach((pais) => {
+        let optEl = document.createElement('option');
+        optEl.value = pais.datosPais.nombre;
+        optEl.innerHTML = pais.datosPais.nombre;
+        optEl.classList.add('opt-list-countries')
+        datalist.appendChild(optEl);
+    });
+}
+
+function compareAndRedirect(name) {
+    for (let i = 0; i < allPaises.paises.length; i++) {
+        const countryName = allPaises.paises[i].datosPais.nombre.toLowerCase()
+        if (countryName === name.toLowerCase()) {
+            const datalist = document.querySelector('#datalist-autocomplete');
+            datalist.innerHTML = '';
+            window.location = `/countries/${allPaises.paises[i].datosPais.codigo}`
+        }
+    }
+}
+
+function searchCountryOnStats(value) {
+    let countriesFound = [];
+    for (let i = 0; i < allPaises.paises.length; i++) {
+        const countryName = allPaises.paises[i].datosPais.nombre.toLowerCase()
+        if (countryName.indexOf(value) > -1) {
+            countriesFound.push(allPaises.paises[i]);
+        }
+    }
+    setItemsOnDataList(countriesFound);
+}
+
+function eventListenersOnStats() {
+    const btn = document.getElementById('btn-send2');
+    if (btn != undefined && btn != null) {
+        buildDataList();
+        const input = document.getElementById('searched2');
+        input.setAttribute('list', 'datalist-autocomplete');
+        input.addEventListener('keyup', () => {
+            if (input.value.length > 1) {
+                searchCountryOnStats(input.value.toLowerCase())
+            } else {
+                const datalist = document.querySelector('#datalist-autocomplete');
+                datalist.innerHTML = '';
+            }
+        });
+        btn.addEventListener('click', () => {
+            compareAndRedirect(input.value);
+        });
+    }
+    const datalist = document.querySelector('#datalist-autocomplete');
+    datalist.innerHTML = '';
 }
 
 function removeElements() {
@@ -60,23 +123,23 @@ function pintarElementos(data) {
     const codigo = data.datosPais.codigo;
     const bandera = data.datosPais.bandera
 
-    const html = `<div class="col-lg-4 col-md-4 col-sm-6 mb-3 mt-3 card-col-paises">
+    const html = `<div class="col-lg-4 col-md-6 col-sm-12 mb-3 mt-3 card-col-paises fadeIn">
                 <div class="card-main-container">
                     <div class="card-main">
                         <div class="description">
                         <h5>${nombre}</h5>
                         <div class="sub-content">
-                            <li>Total Confirmados: <span>${cantConfirmados}</span></li>
-                            <li>Total Fallecidos: <span>${cantFallecidos}</span></li>
-                            <li>Total Recuperados: <span>${cantRecuperados}</span></li>
-                            <li>% Recuperación: <span class="percent-green">${pRecuperacion}%</span></li>
-                            <li>% Letalidad: <span class="percent-red">${pLetalidad}%</span></li>
+                            <li>Total Confirmed: <span>${cantConfirmados}</span></li>
+                            <li>Total Deaths: <span>${cantFallecidos}</span></li>
+                            <li>Total Recovered: <span>${cantRecuperados}</span></li>
+                            <li>% Recovered: <span class="percent-green">${pRecuperacion}%</span></li>
+                            <li>% Lethality: <span class="percent-red">${pLetalidad}%</span></li>
                         </div>
 
 
                         <a class="btn-country" href="/countries/${codigo}">
                             <strong>
-                                Ver más
+                                View more
                                 <i class="fas fa-angle-right"></i>
                             </strong>
                         </a>
@@ -109,6 +172,7 @@ function getInitialData() {
         .then(res => res.json())
         .then(data => {
             allPaises = data;
+            initPagination(1);
             if (actualLocation.length === 3 && actualLocation.indexOf('countries') > -1) {
                 actualCountryCode = actualLocation[2];
                 renderPieChart();
@@ -118,6 +182,58 @@ function getInitialData() {
         .catch(err => {})
 }
 
+function createPagination(cant) {
+    const actualPath = window.location.pathname;
+    const paginas = Math.round(cant / 12);
+    const containerPag = document.querySelector('#pagination');
+    containerPag.innerHTML = '';
+    for (let i = 0; i < paginas; i++) {
+        containerPag.innerHTML += `<button class="btn-pagination" onClick="initPagination(${i+1})">${i+1}</button>`
+    }
+
+}
+
+function updatePagination(page) {
+    const links = document.querySelectorAll('.btn-pagination');
+    links.forEach((item, index) => {
+        item.classList.remove('active-pagination');
+        if ((index + 1) === page) {
+            item.classList.add('active-pagination');
+        }
+    })
+    actualPage = page;
+}
+
+function initPagination(pagina) {
+    try {
+        removeElements();
+        const location = window.location.pathname.split('/');
+        const continente = location[location.length - 1];
+        const paises = allPaises.paises;
+        let contador = 0;
+        const pageElements = 12;
+        const minEl = pageElements * (pagina - 1);
+        const maxEl = minEl + pageElements;
+        for (let i = 0; i < paises.length; i++) {
+            if (continente != 'countries') {
+                if (paises[i].datosPais.region === continente) {
+                    if (contador >= minEl && contador < maxEl) {
+                        pintarElementos(paises[i]);
+                    }
+                    contador++;
+                }
+            } else {
+                if (contador >= minEl && contador < maxEl) {
+                    pintarElementos(paises[i]);
+                }
+                contador++;
+            }
+        }
+        document.querySelector('#cantidad-countries').innerHTML = contador + ' countries affected';
+        createPagination(contador);
+        updatePagination(pagina)
+    } catch (error) {}
+}
 
 function returnPaisesDesdeContienentes(search) {
     try {
@@ -134,7 +250,7 @@ function returnPaisesDesdeContienentes(search) {
                     contador++;
                 }
             }
-            document.querySelector('#cantidad-countries').innerHTML = contador + ' countries';
+            document.querySelector('#cantidad-countries').innerHTML = contador + ' countries found';
         } else {
             const paises = allPaises.paises;
             let contador = 0;
@@ -146,7 +262,7 @@ function returnPaisesDesdeContienentes(search) {
                     contador++;
                 }
             }
-            document.querySelector('#cantidad-countries').innerHTML = contador + ' countries';
+            document.querySelector('#cantidad-countries').innerHTML = contador + ' countries found';
         }
     } catch (error) {}
 }
@@ -191,7 +307,7 @@ function obtainData() {
             }
         })
         .catch(err => {
-            document.getElementById('message-error').innerHTML = 'No se encontraron resultados';
+            document.getElementById('message-error').innerHTML = 'No results found';
         })
 }
 
@@ -313,14 +429,14 @@ function renderPieChart() {
             type: 'donut',
             foreColor: '#eee',
         },
-        labels: ['% Actives', '% Recoveries', '% Lethality'],
+        labels: ['% Actives', '% Recovered', '% Deaths'],
         legend: {
             position: 'bottom'
         },
         tooltip: {
             enabled: true,
         },
-        colors: ['#008ffb', '#28a745', '#aa0000'],
+        colors: ['#0075cf', '#00BB7A', '#ff4560'],
         responsive: [{
             breakpoint: 480,
             options: {
@@ -340,7 +456,6 @@ function renderPieChart() {
         }
     }
     actualCountry = obj;
-    console.log(obj);
     document.querySelector('#cant-confirmados').innerHTML = `${obj.cantConfirmados}`;
     document.querySelector('#cant-fallecidos').innerHTML = `${obj.cantFallecidos}`;
     document.querySelector('#cant-recuperados').innerHTML = `${obj.cantRecuperados }`;
@@ -348,17 +463,15 @@ function renderPieChart() {
     document.querySelector('#aumento-recuperados').innerHTML = `<small><strong>+ ${obj.nuevosRecuperados} last hours</strong></small>`;
     document.querySelector('#aumento-fallecidos').innerHTML = `<small><strong>+ ${obj.nuevasMuertes} last hours</strong></small>`;
     document.querySelector('#aumento-casos').innerHTML = `<small><strong>+ ${obj.nuevosCasos} last hours</strong></small>`;
-
+    document.querySelector('#img-flag').src = obj.datosPais.bandera;
+    document.querySelector('#img-flag').classList.remove('d-none');
     opts.series = [obj.cantConfirmados - (obj.cantRecuperados + obj.cantFallecidos), obj.cantRecuperados, obj.cantFallecidos]
     let chart = new ApexCharts(document.querySelector("#chart-countrie2"), opts);
     chart.render();
     obtainData();
+    eventListenersOnStats();
 }
 
 search();
 getInitialData();
 updateLinkActive();
-
-
-
-/* addEventListenerBtnChange() */

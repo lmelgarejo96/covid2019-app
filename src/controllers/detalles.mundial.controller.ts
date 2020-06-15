@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import requestAPI from 'request';
 import DetalleMundial from '../models/DetallesMundial';
+import daoContinente from './continente.controller';
 
 class daoMundialController {
     constructor() {
@@ -22,7 +23,14 @@ class daoMundialController {
                 )
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
-                const obj = { ...casoPais, pLetalidad, pRecuperacion, year: new Date().getFullYear(), activos: (casoPais.getCantConfirmados()- (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) };
+                const obj = { 
+                    ...casoPais,
+                     pLetalidad, 
+                     pRecuperacion, 
+                     year: new Date().getFullYear(), 
+                     activos: (casoPais.getCantConfirmados()- (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())),  
+                     continents: daoContinente.getDaoContinente().getMoreInfoContinent()
+                    };
 
                 return res.render('index', obj);
             });

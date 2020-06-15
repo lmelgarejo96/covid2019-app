@@ -1,54 +1,30 @@
 <main class="countries-wrapper">
     <div class="container">
-    {{!-- <div class="mt-3 mb-2">
-       
-    </div> --}}
-    <div class="w-100 busqueda-covid-app mt-3 mb-2">
-        <div class="container-busqueda">
-            <form class="mb-lg-4 ">
-                <input autofocus="true" id="searched" type="text" placeholder="Search...">
-                <button id="btn-send" type="button"><i class="fa fa-search mr-4"></i>
-            </form>
+
+        <div class="w-100 busqueda-covid-app mt-3 mb-2">
+            <div class="container-busqueda">
+                <form class="mb-lg-4 ">
+                    <input autofocus="true" id="searched" type="text" placeholder="Search...">
+                    <button id="btn-send" type="button"><i class="fa fa-search mr-4"></i>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="w-100 text-center mb-3 text-white">
-         <h5 class="title-pais ">{{region}}</h5>
-        <p><small>{{fecha}} - <strong id="cantidad-countries">{{cantidad}} countries affected</strong></small> </p>
-    </div>
-    
-
-    <div id="row-paises" class="row mt-4 mb-4">
-        {{#each all}}
-        <div class="col-lg-4 col-md-4 col-sm-6 mb-3 mt-3 card-col-paises">
-                <div class="card-main-container">
-                    <div class="card-main">
-                        <div class="description">
-                        <h5>{{datosPais.nombre}}</h5>
-                        <div class="sub-content">
-                            <li>Total Confirmados: <span>{{cantConfirmados}}</span></li>
-                            <li>Total Fallecidos: <span>{{cantFallecidos}}</span></li>
-                            <li>Total Recuperados: <span>{{cantRecuperados}}</span></li>
-                            <li>% Recuperación: <span class="percent-green">{{pRecuperacion}}%</span></li>
-                            <li>% Letalidad: <span class="percent-red">{{pLetalidad}}%</span></li>
-                        </div>
-
-
-                        <a class="btn-country" href="/countries/{{datosPais.codigo}}">
-                            <strong>
-                                Ver más
-                                <i class="fas fa-angle-right"></i>
-                            </strong>
-                        </a>
-                        </div>
-                            <img loading="lazy" draggable="false" class="img-fluid" src="{{datosPais.bandera}}" alt />
-                    </div>
-                </div>
+        <div class="w-100 text-center mb-3 text-white">
+            <h5 class="title-pais ">{{region}}</h5>
+            <p><small>{{fecha}} - <strong id="cantidad-countries">{{cantidad}} countries affected</strong></small> </p>
         </div>
-        {{/each}}
+
+
+        <div id="row-paises" class="row mt-4 mb-4">
+        </div>
+
+        <div class="w-100 mt-2 pb-4">
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <h6 class="title-pais text-center mb-3 mt-3"><small><strong>{{year}} - Luis Melgarejo. All rights reserved
+                </strong></small></h6>
+
+
     </div>
-
-    
-    <h6 class="title-pais text-center mb-3"><small><strong>{{year}} - {{!-- Luis Melgarejo. --}} All rights reserved </strong></small></h6>
-
-</div>
 </main>

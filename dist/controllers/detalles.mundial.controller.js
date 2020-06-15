@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const request_1 = __importDefault(require("request"));
 const DetallesMundial_1 = __importDefault(require("../models/DetallesMundial"));
+const continente_controller_1 = __importDefault(require("./continente.controller"));
 class daoMundialController {
     constructor() {
     }
@@ -17,7 +18,8 @@ class daoMundialController {
                 const casoPais = new DetallesMundial_1.default(respuestaAPI.total_cases, respuestaAPI.total_deaths, respuestaAPI.total_recovered, new Date(), respuestaAPI.total_new_cases_today, respuestaAPI.total_new_deaths_today, respuestaAPI.total_affected_countries);
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
-                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, year: new Date().getFullYear(), activos: (casoPais.getCantConfirmados() - (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())) });
+                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad,
+                    pRecuperacion, year: new Date().getFullYear(), activos: (casoPais.getCantConfirmados() - (casoPais.getCantFallecidos() + casoPais.getCantRecuperados())), continents: continente_controller_1.default.getDaoContinente().getMoreInfoContinent() });
                 return res.render('index', obj);
             });
         }

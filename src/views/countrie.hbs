@@ -1,24 +1,48 @@
 <main>
     <div class="container">
-        <h3 class="title-pais text-center"><strong id="title-pais-details"></strong> (<small>{{codPais}}</small>)- {{year}}</h3>
-            <div class="select-wrapper mb-2 mt-4">
-                <select id="select-month" class="select">
-                    <option value="all">All months</option>
-                </select>
+        <div class="w-100 busqueda-covid-app">
+            <div class="container-busqueda">
+                <form id="form-stats">
+                    <input autofocus="true" id="searched2" type="text" placeholder="Search another country...">
+                    <button id="btn-send2" type="button"><i class="fa fa-search mr-4"></i>
+                </form>
             </div>
-        <div class="row row-cards">
-            <div class="col-lg-8 col-md-12 col-sm-12 h-100">
-                <div id="chart-countrie">
+        </div>
+        <h6 class="text-center letters small-letters pt-2 pb-3 fadeIn"><small><strong>Select a valid country and press the search button</strong></small></h6>
+        <div class="w-100 mt-3 d-flex align-items-center justify-content-center">
+            <div class="mr-3">
+                <h4 class="title-pais text-center fadeIn"><strong id="title-pais-details"></strong> <strong>({{codPais}})</strong> </h4>
+                
+            </div>
+            <img draggable="false" id="img-flag" class="img-flag d-none" src="" alt="flag">
+        </div>
 
+
+        <div class="row equal row-country-selected ">
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="w-100 h-100 container-card-chart">
+                    <div class="select-wrapper mb-2">
+                        <select id="select-month" class="select fadeIn">
+                            <option value="all">All months</option>
+                        </select>
+                    </div>
+                    <div id="chart-countrie">
+
+                    </div>
+                    <div class="title-pais" id="message-error"></div>
                 </div>
-                <div class="title-pais" id="message-error"></div>
             </div>
-            <div class="col-lg-4 col-md-12 col-sm-12 h-100">
-                <div class="container-chart mt-3">
-                    <div id="chart-countrie2"></div>
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="w-100 h-100 container-card-chart">
+                    <h6 class="text-center letters pb-2 fadeIn"><small><strong>{{fecha}}</strong></small></h6>
+                    <div class="container-chart mt-3">
+                        <div id="chart-countrie2"></div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
         <div class="row row-cards row-country-selected">
             <div class="col-lg-3 col-md-6 col-sm-12 mt-2 mb-4 col-card-index1">
                 <div class="card-main card-main2 fadeIn card-1">
@@ -56,7 +80,10 @@
                 </div>
             </div>
         </div>
+
         
-        <h6 class="title-pais text-center mb-3"><small><strong>{{year}} - {{!-- Luis Melgarejo. --}} All rights reserved </strong></small></h6>
+
+        <h6 class="title-pais text-center mb-3"><small><strong>{{year}} - Luis Melgarejo. All rights reserved
+                </strong></small></h6>
     </div>
 </main>

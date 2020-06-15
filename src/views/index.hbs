@@ -21,7 +21,7 @@
                     <div class="content">
                         <h5 class="title">Detected cases <i class="fas fa-user-friends"></i></h5>
                         <h2 class="title">{{cantConfirmados}}</h2>
-                        <p class="p-0 m-0"><small><strong>+{{nuevosCasos}} last 24h</strong></small></p>
+                        <p class="p-0 m-0"><small><strong>+{{nuevosCasos}} last hours</strong></small></p>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     <div class="content">
                         <h5 class="title">Deaths <i class="fas fa-skull-crossbones"></i></h5>
                         <h2 class="title">{{cantFallecidos}}</h2>
-                        <p class="p-0 m-0"><small><strong>+{{nuevasMuertes}} last 24h - {{pLetalidad}}% lethality</strong></small></p>
+                        <p class="p-0 m-0"><small><strong>+{{nuevasMuertes}} last hours</strong></small></p>
                     </div>
                 </div>
             </div>
@@ -50,14 +50,11 @@
                     <div class="content">
                         <h5 class="title">Actives <i class="fas fa-diagnoses"></i></h5>
                         <h2 class="title">{{activos}}</h2>
-                        {{!-- 
-                        <p class="p-0 m-0"><small><strong>{{paisesAfectados}} countries affected</strong></small></p> 
-                         --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <h6 class="title-pais title-fecha"><small><strong>{{year}} - {{!-- Luis Melgarejo. --}} All rights reserved </strong></small></h6>
+    <h6 class="title-pais title-fecha"><small><strong>{{year}} - Luis Melgarejo. All rights reserved </strong></small></h6>
 </main>

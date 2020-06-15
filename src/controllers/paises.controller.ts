@@ -2,6 +2,7 @@ import Pais, { IPais } from '../models/Pais';
 import requestAPI from 'request';
 
 export default class daoPais {
+    
     private static daop: daoPais;
     private paises: IPais[] = [];
 
@@ -56,7 +57,7 @@ export default class daoPais {
             return {}
         }
     }
-    searchCountryByNameAndRegion(countryCode: string, namePais: string): Array<Object> {
+    public searchCountryByNameAndRegion(countryCode: string, namePais: string): Array<Object> {
         try {
             let countries= [];
             for(let i = 0; i< this.paises.length; i++){

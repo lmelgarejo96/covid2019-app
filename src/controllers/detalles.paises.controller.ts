@@ -101,7 +101,6 @@ class daoDetallesPais {
             requestAPI('https://api.covid19api.com/summary', (error, response, body: any) => {
                 if (error || response.statusCode != 200) return res.status(404).json({msg: 'error'});
                 const respuestaAPI = JSON.parse(body).Countries;
-                console.log(respuestaAPI[0]);
                 const casosPais = respuestaAPI.map((caso: any)=>{
                     const casoPais = new DetallesPais(
                         caso.TotalConfirmed/* +caso.NewConfirmed */,

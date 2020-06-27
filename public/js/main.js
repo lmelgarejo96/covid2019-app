@@ -1,5 +1,7 @@
 let allPaises = [];
 let allDatacountries = [];
+
+let codePaisesAPI = []
 let actualCountryCode = ''
 let actualCountry = {}
 let actualPage = 1;
@@ -122,25 +124,29 @@ function pintarElementos(data) {
     const nombre = data.datosPais.nombre;
     const codigo = data.datosPais.codigo;
     const bandera = data.datosPais.bandera
-
+        /* 
+            <li>Last update: <span>${data.lastUpdate}</span></li>
+        */
     const html = `<div class="col-lg-4 col-md-6 col-sm-12 mb-3 mt-3 card-col-paises fadeIn">
                 <div class="card-main-container">
                     <div class="card-main">
                         <div class="description">
                         <h5>${nombre}</h5>
                         <div class="sub-content">
+                            Confimed cases until yesterday
+                            <hr />
                             <li>Total Confirmed: <span>${cantConfirmados}</span></li>
                             <li>Total Deaths: <span>${cantFallecidos}</span></li>
                             <li>Total Recovered: <span>${cantRecuperados}</span></li>
                             <li>% Recovered: <span class="percent-green">${pRecuperacion}%</span></li>
                             <li>% Lethality: <span class="percent-red">${pLetalidad}%</span></li>
-                            <li>Last update: <span>${data.lastUpdate}</span></li>
+                            
                         </div>
 
 
                         <a class="btn-country" href="/countries/${codigo}">
                             <strong>
-                                View more
+                                Today Cases
                                 <i class="fas fa-angle-right"></i>
                             </strong>
                         </a>
@@ -153,13 +159,12 @@ function pintarElementos(data) {
     document.querySelector('#row-paises').innerHTML += html;
 }
 
-function pintarOpsMonths() {
+function pintarOpsMonths(months) {
     const select = document.querySelector('#select-month');
-    const monthActual = new Date().getMonth()
-    for (let i = 1; i <= monthActual + 1; i++) {
-        select.innerHTML += `<option value="${mesesIngles[i].toLocaleLowerCase()}">${mesesIngles[i]}</option>`
+    for (let i = 0; i < months.length; i++) {
+        select.innerHTML += `<option value="${months[i].toLowerCase()}">${months[i]}</option>`
     }
-    select.value = mesesIngles[monthActual + 1].toLocaleLowerCase();
+    select.value = months[months.length - 1].toLowerCase();
     select.addEventListener('change', () => {
         let value = select.value
         filterByMonth(2, value);
@@ -176,8 +181,8 @@ function getInitialData() {
             initPagination(1);
             if (actualLocation.length === 3 && actualLocation.indexOf('countries') > -1) {
                 actualCountryCode = actualLocation[2];
-                renderPieChart();
-                pintarOpsMonths();
+                obtainData();
+                eventListenersOnStats();
             }
         })
         .catch(err => {})
@@ -269,47 +274,130 @@ function returnPaisesDesdeContienentes(search) {
 }
 
 function obtainData() {
-    const countryCode = actualLocation[actualLocation.length - 1];
-    fetch('https://api.thevirustracker.com/free-api?countryTimeline=' + countryCode, {
+    fetch('https://api.covid19api.com/countries', {
             method: 'GET',
         })
         .then(res => res.json())
         .then(data => {
-            document.getElementById('title-pais-details').innerHTML = data.countrytimelinedata[0].info.title;
-            return data.timelineitems[0];
+            codePaisesAPI = data;
+            const countryCode = actualLocation[actualLocation.length - 1];
+
+            fetch('https://api.covid19api.com/total/dayone/country/' + findCode(countryCode), {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    fetch('https://api.thevirustracker.com/free-api?countryTimeline=' + countryCode, {
+                            method: 'GET',
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            document.getElementById('title-pais-details').innerHTML = data.countrytimelinedata[0].info.title;
+                            return data.timelineitems[0];
+                        })
+                        .then((countryCases) => {
+                            const obje = obtainLastDay(countryCases);
+                            prepareDatos2(data, obje);
+                        })
+                })
+
+
+            .catch(err => {
+                document.getElementById('message-error').innerHTML = 'No results found';
+            })
         })
-        .then((countryCases) => {
-            if (countryCases) {
-                const fechActual = new Date();
-                const anioActual = fechActual.getFullYear().toString();
-                let fechas = [];
-                let allDataCountry = [];
+        .catch(err => {})
+}
 
-                for (let j = 0; j < 13; j++) { //mes
-                    for (let i = 0; i < 32; i++) {
-                        let day = i;
-                        if (day < 10) day = '0' + day;
-                        const fecha = `${j}/${day}/${anioActual.substring(2, 4)}`
-                        const realCase = countryCases[fecha];
-                        if (realCase != undefined) {
-                            const mesName = mesesIngles[j];
-                            const total = realCase.total_cases
-                            const deaths = realCase.total_deaths
-                            const recoveries = realCase.total_recoveries
-                            const series = { total, deaths, recoveries, fecha, monthName: mesName }
+function findCode(cod) {
+    let code = ''
+    for (let i = 0; i < codePaisesAPI.length; i++) {
+        if (cod === codePaisesAPI[i].ISO2) {
+            code = codePaisesAPI[i].Slug;
+            break;
+        }
+    }
+    return code;
+}
 
-                            fechas.push(fecha);
-                            allDataCountry.push(series);
-                        }
-                    }
+function prepareDatos2(datos, objecto) {
+    let fechas = [];
+    let allDataCountry = [];
+    let monthsArr = [];
+    for (let i = 0; i < datos.length; i++) {
+        const series = {
+            total: datos[i].Confirmed,
+            deaths: datos[i].Deaths,
+            recoveries: datos[i].Recovered,
+            fecha: datos[i].Date.substring(0, 10).replace("-", "/").replace("-", "/"),
+            monthName: mesesIngles[parseInt(datos[i].Date.substring(5, 7))]
+        }
+        if (monthsArr.indexOf(series.monthName) === -1) {
+            monthsArr.push(series.monthName);
+        }
+        allDataCountry.push(series)
+        fechas.push(series.fecha)
+    }
+    replaceCeros(allDataCountry);
+    objecto.recoveries = allDataCountry[allDataCountry.length - 1].recoveries;
+    if (new Date(allDataCountry[allDataCountry.length - 1].fecha).getTime() < new Date(objecto.fecha).getTime()) {
+        allDataCountry.push(objecto)
+    }
+    allDatacountries = allDataCountry;
+    pintarOpsMonths(monthsArr);
+    filterByMonth(1, monthsArr[monthsArr.length - 1]);
+    renderPieChart();
+}
+
+function replaceCeros(arr) {
+    let aux1 = 0;
+    let aux2 = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].recoveries > 0) {
+            aux1++;
+        }
+        if (arr[i].deaths > 0) {
+            aux2++;
+        }
+        // cambiar cero por dia anterior
+        if (aux1 > 0 && arr[i].recoveries === 0) {
+            arr[i].recoveries = arr[i - 1].recoveries
+        }
+        if (aux2 > 0 && arr[i].deaths === 0) {
+            arr[i].deaths = arr[i - 1].deaths
+        }
+    }
+}
+
+function obtainLastDay(countryCases) {
+    if (countryCases) {
+        const fechActual = new Date();
+        const anioActual = fechActual.getFullYear().toString();
+        let fechas = [];
+        let allDataCountry = [];
+
+        for (let j = 0; j < 13; j++) { //mes
+            for (let i = 0; i < 32; i++) {
+                let day = i;
+                if (day < 10) day = '0' + day;
+                const fecha = `${j}/${day}/${anioActual.substring(2, 4)}`
+                const realCase = countryCases[fecha];
+                if (realCase != undefined) {
+                    const mesName = mesesIngles[j];
+                    const total = realCase.total_cases
+                    const deaths = realCase.total_deaths
+                    const recoveries = realCase.total_recoveries
+                    const series = { total, deaths, recoveries, fecha, monthName: mesName }
+
+                    fechas.push(fecha);
+                    allDataCountry.push(series);
                 }
-                allDatacountries = allDataCountry;
-                filterByMonth(1, mesesIngles[new Date().getMonth() + 1]);
             }
-        })
-        .catch(err => {
-            document.getElementById('message-error').innerHTML = 'No results found';
-        })
+        }
+        return allDataCountry[allDataCountry.length - 1];
+        /* allDatacountries = allDataCountry;
+        filterByMonth(1, mesesIngles[new Date().getMonth() + 1]); */
+    }
 }
 
 function filterByMonth(type, valueSearch) {
@@ -332,14 +420,14 @@ function filterByMonth(type, valueSearch) {
             fechasArr.push(allDatacountries[i].fecha)
         }
     }
-    totalArr[totalArr.length - 1] = actualCountry.cantConfirmados;
+    /* totalArr[totalArr.length - 1] = actualCountry.cantConfirmados;
     deathsArr[deathsArr.length - 1] = actualCountry.cantFallecidos;
-    recoveriesArr[recoveriesArr.length - 1] = actualCountry.cantRecuperados;
+    recoveriesArr[recoveriesArr.length - 1] = actualCountry.cantRecuperados; */
     const data = {
         series: [
             { name: 'Total Cases', data: totalArr },
             { name: 'Total Deaths', data: deathsArr },
-            /* { name: 'Total Recoveries', data: recoveriesArr }, */
+            { name: 'Total Recoveries', data: recoveriesArr },
         ],
         fechas: fechasArr
     }
@@ -355,7 +443,7 @@ function prepareChart(dates) {
         series: dates.series,
         chart: {
             type: 'area',
-            stacked: false,
+            /* stacked: false, */
             foreColor: '#eee',
             height: 350,
             zoom: {
@@ -395,10 +483,14 @@ function prepareChart(dates) {
         },
         xaxis: {
             type: 'datetime',
-            categories: dates.fechas
+            categories: dates.fechas,
+            /* title: {
+                text: 'Dates Cases'
+            } */
         },
+        /* labels: dates.fechas, */
         tooltip: {
-            shared: false,
+            shared: true,
         }
     };
     renderChart(options);
@@ -457,21 +549,25 @@ function renderPieChart() {
         }
     }
     actualCountry = obj;
-    document.querySelector('#cant-confirmados').innerHTML = `${obj.cantConfirmados}`;
-    document.querySelector('#cant-fallecidos').innerHTML = `${obj.cantFallecidos}`;
-    document.querySelector('#cant-recuperados').innerHTML = `${obj.cantRecuperados }`;
-    document.querySelector('#cant-activos').innerHTML = `${(obj.cantConfirmados)-(obj.cantFallecidos  + obj.cantRecuperados)}`;
-    document.querySelector('#aumento-recuperados').innerHTML = `<small><strong>+ ${obj.nuevosRecuperados} last hours</strong></small>`;
-    document.querySelector('#aumento-fallecidos').innerHTML = `<small><strong>+ ${obj.nuevasMuertes} last hours</strong></small>`;
-    document.querySelector('#aumento-casos').innerHTML = `<small><strong>+ ${obj.nuevosCasos} last hours</strong></small>`;
+    const lastDay = allDatacountries[allDatacountries.length - 1]
+    const afterLastDay = allDatacountries[allDatacountries.length - 2]
+    document.querySelector('#cant-confirmados').innerHTML = `${lastDay.total}`;
+    document.querySelector('#cant-fallecidos').innerHTML = `${lastDay.deaths}`;
+    document.querySelector('#cant-recuperados').innerHTML = `${lastDay.recoveries}`;
+    const fechaLastRecoveries = new Date(afterLastDay.fecha);
+    document.querySelector('#cant-activos').innerHTML = `${(lastDay.total)-(lastDay.deaths  + lastDay.recoveries)}`;
+    document.querySelector('#aumento-recuperados').innerHTML = `<small><strong>Last updated: ${fechaLastRecoveries.toLocaleDateString()}</strong></small>`;
+    document.querySelector('#aumento-activos').innerHTML = `<small><strong>Last updated: ${fechaLastRecoveries.toLocaleDateString()}</strong></small>`;
+    document.querySelector('#aumento-fallecidos').innerHTML = `<small><strong> + ${lastDay.deaths - afterLastDay.deaths} last 24 hours</strong></small>`;
+    document.querySelector('#aumento-casos').innerHTML = `<small><strong>+ ${lastDay.total - afterLastDay.total} last 24 hours</strong></small>`;
     document.querySelector('#img-flag').src = obj.datosPais.bandera;
     document.querySelector('#img-flag').classList.remove('d-none');
-    document.querySelector('#date-update').innerHTML = obj.lastUpdate
-    opts.series = [obj.cantConfirmados - (obj.cantRecuperados + obj.cantFallecidos), obj.cantRecuperados, obj.cantFallecidos]
+    const fechaUp = new Date(lastDay.fecha)
+    document.querySelector('#date-update').innerHTML = fechaUp.toDateString() //
+    opts.series = [(lastDay.total) - (lastDay.deaths + lastDay.recoveries), lastDay.recoveries, lastDay.deaths]
     let chart = new ApexCharts(document.querySelector("#chart-countrie2"), opts);
     chart.render();
-    obtainData();
-    eventListenersOnStats();
+
 }
 
 search();

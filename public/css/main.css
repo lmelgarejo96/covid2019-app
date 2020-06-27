@@ -813,3 +813,8 @@ select:hover {
     background-color: #fff;
     color: #000 !important;
 }
+
+hr {
+    margin: 3px 0 8px;
+    background: rgba(255, 255, 255, .7);
+}

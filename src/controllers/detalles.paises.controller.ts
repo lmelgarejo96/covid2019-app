@@ -28,7 +28,7 @@ class daoDetallesPais {
                     const pLetalidad = casoPais.getPorcentajeLetalidad();
                     const pRecuperacion =  casoPais.getPorcentajeRecuperados();
                     const datosPais = daoPais.getDaoPais().searchCountry(casoPais.getCodPais());
-                    const obj = {...casoPais,pLetalidad, pRecuperacion, datosPais};
+                    const obj = {...casoPais,pLetalidad, pRecuperacion, datosPais , lastUpdate: new Date(caso.Date).toLocaleString()};
                     return obj;
                 });
                 res.render('countries', {
@@ -57,9 +57,9 @@ class daoDetallesPais {
                 const respuestaAPI = JSON.parse(body).Countries;
                 const casosPais = respuestaAPI.map((caso: any)=>{
                     const casoPais = new DetallesPais(
-                        caso.TotalConfirmed+caso.NewConfirmed,
-                        caso.TotalDeaths+caso.NewDeaths,
-                        caso.TotalRecovered+caso.NewRecovered,
+                        caso.TotalConfirmed/* +caso.NewConfirmed */,
+                        caso.TotalDeaths/* +caso.NewDeaths */,
+                        caso.TotalRecovered/* +caso.NewRecovered */,
                         caso.Date,
                         caso.NewConfirmed,
                         caso.NewDeaths,
@@ -70,7 +70,7 @@ class daoDetallesPais {
                     const pRecuperacion =  casoPais.getPorcentajeRecuperados();
          
                     const datosPais = daoPais.getDaoPais().searchCountry(casoPais.getCodPais());
-                    const obj = {...casoPais,pLetalidad, pRecuperacion, datosPais};
+                    const obj = {...casoPais,pLetalidad, pRecuperacion, datosPais , lastUpdate: caso.Date};
                     return obj;
                 });
                 const respuesta = casosPais.filter((casoP: any) => {
@@ -101,11 +101,12 @@ class daoDetallesPais {
             requestAPI('https://api.covid19api.com/summary', (error, response, body: any) => {
                 if (error || response.statusCode != 200) return res.status(404).json({msg: 'error'});
                 const respuestaAPI = JSON.parse(body).Countries;
+                console.log(respuestaAPI[0]);
                 const casosPais = respuestaAPI.map((caso: any)=>{
                     const casoPais = new DetallesPais(
-                        caso.TotalConfirmed+caso.NewConfirmed,
-                        caso.TotalDeaths+caso.NewDeaths,
-                        caso.TotalRecovered+caso.NewRecovered,
+                        caso.TotalConfirmed/* +caso.NewConfirmed */,
+                        caso.TotalDeaths/* +caso.NewDeaths */,
+                        caso.TotalRecovered/* +caso.NewRecovered */,
                         caso.Date,
                         caso.NewConfirmed,
                         caso.NewDeaths,
@@ -115,7 +116,7 @@ class daoDetallesPais {
                     const pLetalidad = casoPais.getPorcentajeLetalidad();
                     const pRecuperacion =  casoPais.getPorcentajeRecuperados();
                     const datosPais = daoPais.getDaoPais().searchCountry(casoPais.getCodPais());
-                    const  obj = {...casoPais,pLetalidad, pRecuperacion, datosPais};
+                    const  obj = {...casoPais,pLetalidad, pRecuperacion, datosPais, lastUpdate: new Date(caso.Date).toLocaleString()};
                     return obj;
                 });
                 return res.status(200).json({paises: casosPais})

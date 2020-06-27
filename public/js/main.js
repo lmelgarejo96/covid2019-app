@@ -134,6 +134,7 @@ function pintarElementos(data) {
                             <li>Total Recovered: <span>${cantRecuperados}</span></li>
                             <li>% Recovered: <span class="percent-green">${pRecuperacion}%</span></li>
                             <li>% Lethality: <span class="percent-red">${pLetalidad}%</span></li>
+                            <li>Last update: <span>${data.lastUpdate}</span></li>
                         </div>
 
 
@@ -465,6 +466,7 @@ function renderPieChart() {
     document.querySelector('#aumento-casos').innerHTML = `<small><strong>+ ${obj.nuevosCasos} last hours</strong></small>`;
     document.querySelector('#img-flag').src = obj.datosPais.bandera;
     document.querySelector('#img-flag').classList.remove('d-none');
+    document.querySelector('#date-update').innerHTML = obj.lastUpdate
     opts.series = [obj.cantConfirmados - (obj.cantRecuperados + obj.cantFallecidos), obj.cantRecuperados, obj.cantFallecidos]
     let chart = new ApexCharts(document.querySelector("#chart-countrie2"), opts);
     chart.render();

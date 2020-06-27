@@ -20,7 +20,7 @@ class daoDetallesPais {
                     const pLetalidad = casoPais.getPorcentajeLetalidad();
                     const pRecuperacion = casoPais.getPorcentajeRecuperados();
                     const datosPais = paises_controller_1.default.getDaoPais().searchCountry(casoPais.getCodPais());
-                    const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais });
+                    const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais, lastUpdate: new Date(caso.Date).toLocaleString() });
                     return obj;
                 });
                 res.render('countries', {
@@ -49,11 +49,11 @@ class daoDetallesPais {
                     return res.render('error');
                 const respuestaAPI = JSON.parse(body).Countries;
                 const casosPais = respuestaAPI.map((caso) => {
-                    const casoPais = new DetallesPais_1.default(caso.TotalConfirmed + caso.NewConfirmed, caso.TotalDeaths + caso.NewDeaths, caso.TotalRecovered + caso.NewRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
+                    const casoPais = new DetallesPais_1.default(caso.TotalConfirmed /* +caso.NewConfirmed */, caso.TotalDeaths /* +caso.NewDeaths */, caso.TotalRecovered /* +caso.NewRecovered */, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
                     const pLetalidad = casoPais.getPorcentajeLetalidad();
                     const pRecuperacion = casoPais.getPorcentajeRecuperados();
                     const datosPais = paises_controller_1.default.getDaoPais().searchCountry(casoPais.getCodPais());
-                    const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais });
+                    const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais, lastUpdate: caso.Date });
                     return obj;
                 });
                 const respuesta = casosPais.filter((casoP) => {
@@ -86,12 +86,13 @@ class daoDetallesPais {
             if (error || response.statusCode != 200)
                 return res.status(404).json({ msg: 'error' });
             const respuestaAPI = JSON.parse(body).Countries;
+            console.log(respuestaAPI[0]);
             const casosPais = respuestaAPI.map((caso) => {
-                const casoPais = new DetallesPais_1.default(caso.TotalConfirmed + caso.NewConfirmed, caso.TotalDeaths + caso.NewDeaths, caso.TotalRecovered + caso.NewRecovered, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
+                const casoPais = new DetallesPais_1.default(caso.TotalConfirmed /* +caso.NewConfirmed */, caso.TotalDeaths /* +caso.NewDeaths */, caso.TotalRecovered /* +caso.NewRecovered */, caso.Date, caso.NewConfirmed, caso.NewDeaths, caso.CountryCode, caso.NewRecovered);
                 const pLetalidad = casoPais.getPorcentajeLetalidad();
                 const pRecuperacion = casoPais.getPorcentajeRecuperados();
                 const datosPais = paises_controller_1.default.getDaoPais().searchCountry(casoPais.getCodPais());
-                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais });
+                const obj = Object.assign(Object.assign({}, casoPais), { pLetalidad, pRecuperacion, datosPais, lastUpdate: new Date(caso.Date).toLocaleString() });
                 return obj;
             });
             return res.status(200).json({ paises: casosPais });
